@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BrightDev | Premium Web Services</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --yellow: #facc15;
+            --blue: #3b82f6;
+            --pink: #f472b6;
+            --green: #22c55e;
+            --dark: #000000;
+            --white: #ffffff;
+            --border: 4px solid #000;
+            --shadow: 8px 8px 0px #000;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        body {
+            background-color: #fefce8;
+            color: var(--dark);
+            overflow-x: hidden;
+        }
+
+        /* --- Hero Section --- */
+        header {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 2rem 2rem;
+            background: var(--blue);
+            border-bottom: var(--border);
+            color: var(--white);
+            position: relative;
+            margin-bottom: 0;
+        }
+
+        /* --- The Swinging Sign --- */
+        .sign-container {
+            position: relative;
+            margin-bottom: 3rem;
+            padding-top: 20px; /* Space for the "strings" */
+        }
+
+        /* The Strings/Threads */
+        .sign-container::before,
+        .sign-container::after {
+            content: "";
+            position: absolute;
+            top: -10px;
+            width: 4px;
+            height: 30px;
+            background: var(--dark);
+            border: 1px solid var(--white);
+            z-index: 1;
+        }
+        .sign-container::before { left: 25%; }
+        .sign-container::after { right: 25%; }
+
+        .hero-tag {
+            background: var(--yellow);
+            color: #000;
+            padding: 0.8rem 2rem;
+            font-weight: 900;
+            font-size: 1.2rem;
+            border: var(--border);
+            box-shadow: 6px 6px 0px #000;
+            display: inline-block;
+            
+            /* Swing Animation Logic */
+            transform-origin: top center;
+            animation: swing-sign 3.5s ease-in-out infinite;
+        }
+
+        @keyframes swing-sign {
+            0% { transform: rotate(6deg); }
+            50% { transform: rotate(-6deg); }
+            100% { transform: rotate(6deg); }
+        }
+
+        h1 {
+            font-size: clamp(3rem, 10vw, 6.5rem);
+            line-height: 0.85;
+            margin-bottom: 2.5rem;
+            text-transform: uppercase;
+            -webkit-text-stroke: 2px #000;
+            letter-spacing: -2px;
+        }
+
+/* --- THE CLICK ME VIBE BUTTON --- */
+        .cta-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+
+        .cta-main {
+            display: inline-block;
+            background: var(--pink);
+            color: #000;
+            padding: 1.5rem 3.5rem;
+            font-size: 1.6rem;
+            font-weight: 900;
+            text-decoration: none;
+            border: var(--border);
+            box-shadow: var(--shadow);
+            text-transform: uppercase;
+            
+            /* The Animation */
+            animation: click-me-vibe 2s infinite cubic-bezier(0.68, -0.55, 0.27, 1.55);
+            transition: 0.1s;
+        }
+
+        @keyframes click-me-vibe {
+            0%, 100% { 
+                transform: scale(1) translateY(0); 
+                box-shadow: 8px 8px 0px #000;
+            }
+            50% { 
+                transform: scale(1.08) translateY(-5px); 
+                box-shadow: 15px 15px 0px #000;
+                background: var(--green); /* Color shift on pulse */
+            }
+        }
+
+        .cta-main:hover {
+            animation: none; /* Stop pulsing when hovering */
+            transform: translate(-4px, -4px);
+            box-shadow: 12px 12px 0px #000;
+            background: var(--white);
+        }
+
+        /* Floating Indicator */
+        .click-indicator {
+            position: absolute;
+            right: -60px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 2.5rem;
+            animation: point-me 1s infinite alternate;
+            pointer-events: none;
+        }
+
+        @keyframes point-me {
+            from { transform: translateY(-50%) translateX(0); }
+            to { transform: translateY(-50%) translateX(-20px); }
+        }
+
+        /* --- Pricing Section --- */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 8rem 2rem;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: clamp(2rem, 5vw, 4rem);
+            margin-bottom: 5rem;
+            text-transform: uppercase;
+            background: var(--yellow);
+            display: inline-block;
+            padding: 0 1rem;
+            border: var(--border);
+            transform: rotate(1deg);
+        }
+
+        .title-wrapper { text-align: center; }
+
+        /* --- GRID (NO CAROUSEL) --- */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 3rem;
+        }
+
+        .card {
+            background: var(--white);
+            border: var(--border);
+            box-shadow: var(--shadow);
+            padding: 3rem;
+            transition: 0.2s;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card:hover {
+            transform: translate(-5px, -5px);
+            box-shadow: 15px 15px 0px #000;
+        }
+
+        .card.yellow { background-color: #fef08a; }
+        .card.blue { background-color: #93c5fd; }
+        .card.pink { background-color: #f9a8d4; }
+
+        .card h3 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+        }
+
+        .price-tag {
+            font-size: 3.5rem;
+            font-weight: 900;
+            margin: 1.5rem 0;
+            letter-spacing: -2px;
+        }
+
+        .price-tag span { font-size: 1.2rem; letter-spacing: 0; }
+
+        /* --- Feature list (added for richness) --- */
+        .feature-list {
+            list-style: none;
+            margin-bottom: 2.5rem;
+            flex-grow: 1;
+        }
+
+        .feature-list li {
+            margin-bottom: 1.2rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            font-size: 1.1rem;
+        }
+
+        .feature-list li i {
+            margin-right: 15px;
+            font-size: 1.3rem;
+            color: #000;
+        }
+
+        /* Original paragraph preserved */
+        .card p {
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+            border-bottom: 2px dashed #000;
+            padding-bottom: 0.8rem;
+        }
+
+        /* --- WhatsApp Button --- */
+        .btn-wa {
+            background: #000;
+            color: var(--white);
+            text-align: center;
+            padding: 1.2rem;
+            text-decoration: none;
+            font-weight: 800;
+            text-transform: uppercase;
+            border: 2px solid #000;
+            transition: 0.2s;
+        }
+
+        .btn-wa:hover {
+            background: var(--green);
+            color: #000;
+        }
+
+        /* --- Floating WhatsApp Button (new) --- */
+        .float-wa {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #25D366;
+            color: white;
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3), 0 0 0 4px #fff, 0 0 0 6px #000;
+            z-index: 999;
+            transition: 0.2s;
+            text-decoration: none;
+            animation: float-wobble 3s infinite ease-in-out;
+        }
+        .float-wa:hover {
+            transform: scale(1.1) rotate(5deg);
+            background: #20b859;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4), 0 0 0 4px #fff, 0 0 0 6px #000;
+        }
+        @keyframes float-wobble {
+            0%,100%{ transform: translateY(0); }
+            50%{ transform: translateY(-10px); }
+        }
+
+        footer {
+            background: #000;
+            color: #fff;
+            text-align: center;
+            padding: 4rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        /* small screen adjustments */
+        @media (max-width: 768px) {
+            .grid {
+                gap: 2rem;
+            }
+            .click-indicator {
+                display: none; /* less clutter on mobile */
+            }
+            .float-wa {
+                width: 60px;
+                height: 60px;
+                font-size: 2rem;
+                bottom: 20px;
+                right: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="sign-container">
+            <div class="hero-tag">OPEN FOR HIRE</div>
+        </div>
+        
+        <h1>BUILDING THE<br>MODERN WEB<br>IN COLOR.</h1>
+       <div class="cta-wrapper">
+            <a href="#booking" class="cta-main">LET'S GET TO WORK</a>
+            <span class="click-indicator">👈</span>
+        </div>
+    </header>
+
+    <div class="container" id="booking">
+        <div class="title-wrapper">
+            <h2 class="section-title">CHOOSE YOUR SETUP</h2>
+        </div>
+        
+        <!-- Clean grid, no carousel -->
+        <div class="grid">
+            <!-- personal card -->
+            <div class="card yellow">
+                <h3>Personal / Blog Website</h3>
+                <div class="price-tag">₵1,500</div>
+                <p>Modern, fast-loading site to tell your story or share your thoughts.</p>
+                <a href="https://wa.me/233544156292?text=Hi! I want a Personal site." class="btn-wa">Order Now</a>
+            </div>
+
+            <div class="card blue">
+                <h3>Portfolio / Creative Showcase</h3>
+                <div class="price-tag">₵2,000</div>
+                <p>Visually stunning layout to make your work shine.</p>
+                <a href="https://wa.me/233544156292?text=Hi! I want an E-commerce site." class="btn-wa">Order Now</a>
+            </div>
+
+            <div class="card pink">
+                <h3>Business / Agency Website</h3>
+                <div class="price-tag">₵3100</div>
+                <p>Professional presence with lead capture & SEO foundation.</p>
+                <a href="https://wa.me/233544156292?text=Hi! I want a Portfolio site." class="btn-wa">Order Now</a>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- floating WhatsApp button (persistent booking) -->
+    <a href="https://wa.me/233544156292?text=Hi! I want to book a website." class="float-wa" target="_blank" rel="noopener">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <footer>
+        <p>HUMAN DEVELOPER &copy; 2026</p>
+    </footer>
+
+    <!-- IMPORTANT: replace "YOUR_NUMBER" in all WhatsApp links with your actual number (e.g., 1234567890) -->
+</body>
+</html>
