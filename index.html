@@ -249,11 +249,10 @@
             color: #333;
             margin-bottom: 0.5rem;
           
-            animation-delay: inherit; /* will be later than card appear */
-            animation-delay: calc(0.8s + 0.4s); /* default, but we set individually below */
+            animation-delay: inherit;
+            animation-delay: calc(0.8s + 0.4s);
         }
 
-        /* individual unblur delays (after card fade in) */
         .card:nth-child(1) .price-blur { animation-delay: 1.4s; }
         .card:nth-child(2) .price-blur { animation-delay: 1.8s; }
         .card:nth-child(3) .price-blur { animation-delay: 2.2s; }
@@ -278,7 +277,7 @@
             box-shadow: 4px 4px 0 #000;
             margin-top: 0.5rem;
             animation: pulseSoft 2s infinite;
-            animation-delay: 2s; /* start after all cards are in */
+            animation-delay: 2s;
         }
 
         .card:nth-child(1) .price-click-btn { animation-delay: 2.2s; }
@@ -392,7 +391,204 @@
             .price-blur { font-size: 2.2rem; }
         }
 
-        /* ensure everything is visible after animations */
+        /* ══════════════════════════════════════════
+           VIEW DESIGNS BUTTON (unchanged)
+        ══════════════════════════════════════════ */
+        .btn-view-designs {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: var(--yellow);
+            color: #000;
+            padding: 0.85rem 1rem;
+            font-weight: 800;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            border: var(--border);
+            box-shadow: 4px 4px 0 #000;
+            cursor: pointer;
+            margin-top: 0.8rem;
+            transition: transform 0.15s, box-shadow 0.15s, background 0.15s;
+            letter-spacing: 0.03em;
+        }
+        .btn-view-designs:hover {
+            background: #000;
+            color: var(--yellow);
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0 #000;
+        }
+        .btn-view-designs i { font-size: 1rem; }
+
+        /* ══════════════════════════════════════════
+           GALLERY OVERLAY (blur + modal)
+        ══════════════════════════════════════════ */
+        .gallery-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.35s ease;
+        }
+        .gallery-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .gallery-backdrop {
+            position: absolute;
+            inset: 0;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+        }
+
+        .gallery-modal {
+            position: relative;
+            z-index: 1;
+            background: #fefce8;
+            border: var(--border);
+            box-shadow: 12px 12px 0 #000;
+            width: 92vw;
+            max-width: 1050px;
+            max-height: 88vh;
+            overflow-y: auto;
+            padding: 2.5rem 2rem 2rem;
+            scrollbar-width: thin;
+            scrollbar-color: #000 transparent;
+        }
+        .gallery-modal::-webkit-scrollbar { width: 5px; }
+        .gallery-modal::-webkit-scrollbar-thumb { background: #000; }
+
+        .gallery-modal-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            margin-bottom: 1.8rem;
+            gap: 1rem;
+        }
+        .gallery-modal-title {
+            font-size: clamp(1.4rem, 3vw, 2rem);
+            font-weight: 800;
+            text-transform: uppercase;
+            line-height: 1.1;
+        }
+        .gallery-modal-sub {
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            background: #000;
+            color: var(--yellow);
+            display: inline-block;
+            padding: 2px 10px;
+            margin-top: 6px;
+        }
+
+        .gallery-close-btn {
+            background: #000;
+            color: #fff;
+            border: none;
+            width: 44px;
+            height: 44px;
+            font-size: 1.4rem;
+            font-weight: 900;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: background 0.15s;
+            box-shadow: 3px 3px 0 #555;
+        }
+        .gallery-close-btn:hover { background: #e11d48; }
+
+        /* image cards grid — now without text */
+        .gallery-img-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+            gap: 1.2rem;
+        }
+
+        .gallery-img-card {
+            background: #fff;
+            border: var(--border);
+            box-shadow: 5px 5px 0 #000;
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(28px) scale(0.94);
+            transition: opacity 0.4s ease, transform 0.4s ease, box-shadow 0.15s, translate 0.15s;
+            cursor: pointer;
+            /* no padding – image fills the card */
+        }
+        .gallery-img-card.popped {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+        .gallery-img-card:hover {
+            box-shadow: 8px 8px 0 #000;
+            translate: -2px -2px;
+        }
+
+        .gallery-img-card img {
+            width: 100%;
+            aspect-ratio: 4 / 3;       /* consistent card shape */
+            object-fit: cover;
+            display: block;
+            border: none;              /* no border-bottom */
+        }
+
+        /* ══════════════════════════════════════════
+           LIGHTBOX (maximized view)
+        ══════════════════════════════════════════ */
+        .lightbox-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 3000;
+            background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(12px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            cursor: zoom-out;
+        }
+        .lightbox-overlay.active {
+            display: flex;
+        }
+        .lightbox-content {
+            max-width: 90vw;
+            max-height: 90vh;
+            border: var(--border);
+            box-shadow: 12px 12px 0 rgba(0,0,0,0.5);
+        }
+        .lightbox-content img {
+            width: 100%;
+            height: auto;
+            max-height: 90vh;
+            object-fit: contain;
+            display: block;
+            background: #fff;
+        }
+        .lightbox-close {
+            position: absolute;
+            top: 30px;
+            right: 40px;
+            font-size: 3rem;
+            color: white;
+            cursor: pointer;
+            background: transparent;
+            border: none;
+            text-shadow: 4px 4px 0 #000;
+        }
+        @media (max-width: 600px) {
+            .gallery-modal { padding: 1.5rem 1rem 1.5rem; }
+            .gallery-img-grid { grid-template-columns: 1fr 1fr; gap: 0.8rem; }
+            .lightbox-close { top: 20px; right: 20px; font-size: 2.5rem; }
+        }
     </style>
 </head>
 <body>
@@ -415,7 +611,7 @@
             <h2 class="section-title">CHOOSE YOUR SETUP</h2>
         </div>
 
-        <!-- card grid (each card fades in one by one, prices unblur, buttons pulse) -->
+        <!-- card grid -->
         <div class="grid">
             <!-- card 1 - personal -->
             <div class="card yellow">
@@ -425,11 +621,7 @@
                     <a href="https://wa.me/233544156292?text=Hi! I'm interested in the Personal/Blog Website. What would the price be?" class="price-click-btn" target="_blank" rel="noopener"><i class="fab fa-whatsapp"></i> click to get price</a>
                 </div>
                 <p>Modern, fast-loading site to tell your story or share your thoughts.</p>
-                <ul class="feature-list">
-                    <li><i class="fas fa-check-circle"></i> Fully responsive</li>
-                    <li><i class="fas fa-check-circle"></i> Contact form</li>
-                    <li><i class="fas fa-check-circle"></i> SEO basics</li>
-                </ul>
+                <button class="btn-view-designs" data-service="personal"><i class="fas fa-th-large"></i> View Sample Designs</button>
             </div>
 
             <!-- card 2 - portfolio -->
@@ -440,12 +632,7 @@
                     <a href="https://wa.me/233544156292?text=Hi! I'm interested in the Portfolio/Creative Showcase. What would the price be?" class="price-click-btn" target="_blank" rel="noopener"><i class="fab fa-whatsapp"></i> click to get price</a>
                 </div>
                 <p>Visually stunning layout to make your work shine.</p>
-                <ul class="feature-list">
-                    <li><i class="fas fa-check-circle"></i> Project galleries</li>
-                    <li><i class="fas fa-check-circle"></i> Lightbox effect</li>
-                    <li><i class="fas fa-check-circle"></i> Testimonials</li>
-                </ul>
-                
+                <button class="btn-view-designs" data-service="portfolio"><i class="fas fa-th-large"></i> View Sample Designs</button>
             </div>
 
             <!-- card 3 - ecommerce -->
@@ -456,12 +643,7 @@
                     <a href="https://wa.me/233544156292?text=Hi! I'm interested in the E-commerce Store. What would the price be?" class="price-click-btn" target="_blank" rel="noopener"><i class="fab fa-whatsapp"></i> click to get price</a>
                 </div>
                 <p>High-converting online shop with payments & inventory.</p>
-                <ul class="feature-list">
-                    <li><i class="fas fa-check-circle"></i> Up to 50 products</li>
-                    <li><i class="fas fa-check-circle"></i> Payment gateway</li>
-                    <li><i class="fas fa-check-circle"></i> Inventory management</li>
-                </ul>
-               
+                <button class="btn-view-designs" data-service="ecommerce"><i class="fas fa-th-large"></i> View Sample Designs</button>
             </div>
 
             <!-- card 4 - business -->
@@ -472,17 +654,12 @@
                     <a href="https://wa.me/233544156292?text=Hi! I'm interested in the Business/Agency Website. What would the price be?" class="price-click-btn" target="_blank" rel="noopener"><i class="fab fa-whatsapp"></i> click to get price</a>
                 </div>
                 <p>Professional presence with lead capture & SEO foundation.</p>
-                <ul class="feature-list">
-                    <li><i class="fas fa-check-circle"></i> Lead capture forms</li>
-                    <li><i class="fas fa-check-circle"></i> Service pages</li>
-                    <li><i class="fas fa-check-circle"></i> Google Maps integration</li>
-                </ul>
-                
+                <button class="btn-view-designs" data-service="business"><i class="fas fa-th-large"></i> View Sample Designs</button>
             </div>
         </div>
     </div>
 
-    <!-- floating WhatsApp button (appears last) -->
+    <!-- floating WhatsApp button -->
     <a href="https://wa.me/233544156292?text=Hi! I want to book a website." class="float-wa" target="_blank" rel="noopener">
         <i class="fab fa-whatsapp"></i>
     </a>
@@ -491,6 +668,157 @@
         <p>HUMAN DEVELOPER &copy; 2026</p>
     </footer>
 
-    <!-- note: all WhatsApp numbers are set to 233544156292 (as provided) -->
+    <!-- GALLERY OVERLAY (blur background) -->
+    <div class="gallery-overlay" id="galleryOverlay">
+        <div class="gallery-backdrop" id="galleryBackdrop"></div>
+        <div class="gallery-modal" id="galleryModal">
+            <div class="gallery-modal-header">
+                <div>
+                    <div class="gallery-modal-title" id="galleryTitle"></div>
+                    <div class="gallery-modal-sub" id="gallerySubtitle"></div>
+                </div>
+                <button class="gallery-close-btn" id="galleryClose" aria-label="Close">&#x2715;</button>
+            </div>
+            <div class="gallery-img-grid" id="galleryGrid"></div>
+        </div>
+    </div>
+
+    <!-- LIGHTBOX (maximized image) -->
+    <div class="lightbox-overlay" id="lightboxOverlay">
+        <button class="lightbox-close" id="lightboxClose">&times;</button>
+        <div class="lightbox-content">
+            <img id="lightboxImg" src="" alt="maximized design">
+        </div>
+    </div>
+
+    <script>
+    // ── IMAGE DATA per service (full‑cover cards, no captions) ──
+    const serviceData = {
+        personal: {
+            title: 'Personal / Blog',
+            subtitle: 'Sample Webpage Designs',
+            items: [
+                'https://images-wixmp-530a50041672c69d335ba4cf.wixmp.com/templates/image/8986240a850fd42b7d259e3469225816bf72748c787dd15b78ba94e807611e941584443523109.jpg',
+                'https://marketplace.canva.com/EAE6WTyrSQ0/2/0/1600w/canva-light-beige-sleek-and-simple-blogger-personal-website--7Q4-7tyJj4.jpg',
+                'https://colorlib.com/wp-content/uploads/sites/2/ted-blog-example.jpg',
+                'https://colorlib.com/wp/wp-content/uploads/sites/2/uber-blog-wordpress-example.jpg.avif',
+                'https://colorlib.com/wp/wp-content/uploads/sites/2/techcrunch-wordpress-blog-example.jpg.avif'
+            ]
+        },
+        portfolio: {
+            title: 'Portfolio / Creative',
+            subtitle: 'Sample Webpage Designs',
+            items: [
+                'https://colorlib.com/wp/wp-content/uploads/sites/2/michael-mannucci-personal-website-example.jpg.avif',
+                'https://colorlib.com/wp/wp-content/uploads/sites/2/erica-lauren-personal-website-example.jpg.avif',
+                'https://colorlib.com/wp/wp-content/uploads/sites/2/elizabeth-carroll-resume-website.jpg.avif',
+                'https://colorlib.com/wp/wp-content/uploads/sites/2/jackson-free-personal-resume-website-template-353x283.jpg.avif',
+                'https://i.ytimg.com/vi/Clll-ZcI2RY/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLBIKzRlddg3F10GXMTOZUpGjSN5Ww'
+            ]
+        },
+        ecommerce: {
+            title: 'E-commerce Store',
+            subtitle: 'Sample Webpage Designs',
+            items: [
+                'https://cdn.dribbble.com/userupload/4771414/file/still-374859fca01782eb063b0bfc528dca33.png', // fashion store
+                'https://nextsky.co/cdn/shop/files/umino-theme-home-decor-3.webp?v=1753868385&width=1200',
+                'https://cdn.dribbble.com/userupload/17702766/file/original-ac226efaec3194dcca31b1a28ebd969c.png?format=webp&resize=400x300&vertical=center',
+                'https://fondy.io/wp-content/uploads/2023/03/resources_marketplace-1024x461.jpg',
+                'https://i.pinimg.com/236x/31/cb/3c/31cb3c5259d3719c53c70941553dbb85.jpg'
+            ]
+        },
+        business: {
+            title: 'Business / Agency',
+            subtitle: 'Sample Webpage Designs',
+            items: [
+                'https://templatemag.com/wp-content/uploads/pro-business-website-template.jpg',
+                'https://colorlib.com/wp/wp-content/uploads/sites/2/revus-automotive-wordpress-theme.jpg',
+                'https://cdn.dribbble.com/userupload/18321386/file/original-ff6a561711165efe2267320cbe95c7dd.png?format=webp&resize=400x300&vertical=center',
+                'https://cdn.prod.website-files.com/660d2f5487880c4b5e088ca2/660d2f5487880c4b5e089aa8_ArifPbJQKJ4x86YCCtDbRz2OwuqpoRbPGpqC9JSF6V6ne6vzEVq90c2iOPjR5EU9NWtlNoxpm1Bq0B9AXPB3tjdRLStr6gtiSjz22ukER19kg7szfhtNiSAyZ-5ALhI0iRj9r8D3lHftflp54WQNaXU.jpeg',
+                'https://bloomagency.in/wp-content/uploads/2025/11/Furniture-eCommerce-Website-Template-Free-Furni.jpg'
+            ]
+        }
+    };
+
+    // DOM elements
+    const overlay   = document.getElementById('galleryOverlay');
+    const backdrop  = document.getElementById('galleryBackdrop');
+    const modal     = document.getElementById('galleryModal');
+    const closeBtn  = document.getElementById('galleryClose');
+    const titleEl   = document.getElementById('galleryTitle');
+    const subtitleEl= document.getElementById('gallerySubtitle');
+    const grid      = document.getElementById('galleryGrid');
+    const lightboxOverlay = document.getElementById('lightboxOverlay');
+    const lightboxImg = document.getElementById('lightboxImg');
+    const lightboxClose = document.getElementById('lightboxClose');
+
+    // Open gallery with full‑cover images (no text)
+    function openGallery(serviceKey) {
+        const data = serviceData[serviceKey];
+        if (!data) return;
+
+        titleEl.textContent = data.title;
+        subtitleEl.textContent = data.subtitle;
+
+        // Rebuild cards: only images, no captions
+        grid.innerHTML = '';
+        data.items.forEach((imgUrl) => {
+            const card = document.createElement('div');
+            card.className = 'gallery-img-card';
+            // Use the image URL directly
+            card.innerHTML = `<img src="${imgUrl}" alt="design" loading="lazy">`;
+            // Click to open lightbox (try to get larger version)
+            card.addEventListener('click', () => {
+                // For Unsplash, increase resolution; for Dribbble keep original
+                let largeSrc = imgUrl;
+                if (imgUrl.includes('unsplash.com') && imgUrl.includes('w=500')) {
+                    largeSrc = imgUrl.replace('w=500', 'w=1200');
+                }
+                lightboxImg.src = largeSrc;
+                lightboxOverlay.classList.add('active');
+            });
+            grid.appendChild(card);
+        });
+
+        // Reset scroll & show
+        modal.scrollTop = 0;
+        overlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+
+        // Staggered pop-in
+        const cards = grid.querySelectorAll('.gallery-img-card');
+        cards.forEach((c, i) => {
+            setTimeout(() => c.classList.add('popped'), 60 + i * 70);
+        });
+    }
+
+    function closeGallery() {
+        overlay.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+
+    // Attach to all "View Designs" buttons
+    document.querySelectorAll('.btn-view-designs').forEach(btn => {
+        btn.addEventListener('click', () => openGallery(btn.dataset.service));
+    });
+
+    closeBtn.addEventListener('click', closeGallery);
+    backdrop.addEventListener('click', closeGallery);
+    document.addEventListener('keydown', e => { 
+        if (e.key === 'Escape') {
+            if (lightboxOverlay.classList.contains('active')) {
+                lightboxOverlay.classList.remove('active');
+            } else {
+                closeGallery();
+            }
+        }
+    });
+
+    // Lightbox close
+    lightboxClose.addEventListener('click', () => lightboxOverlay.classList.remove('active'));
+    lightboxOverlay.addEventListener('click', (e) => {
+        if (e.target === lightboxOverlay) lightboxOverlay.classList.remove('active');
+    });
+    </script>
 </body>
 </html>
